@@ -23,5 +23,6 @@
 	<div> 제목 : <%= (String) articleMap.get("title") %></div>
 	<div> 내용 : <%= (String) articleMap.get("body") %></div>
 	<div><a href="list">목록</a></div>
+	<div><a href="delete?id=<%= (int) articleMap.get("id") %>">삭제</a></div>
 </body>
 </html>
