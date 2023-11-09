@@ -22,7 +22,10 @@
 	<div> 수정일 : <%= (LocalDateTime) articleMap.get("updateDate") %></div>
 	<div> 제목 : <%= (String) articleMap.get("title") %></div>
 	<div> 내용 : <%= (String) articleMap.get("body") %></div>
-	<div><a href="list">목록</a></div>
-	<div><a href="delete?id=<%= (int) articleMap.get("id") %>">삭제</a></div>
+	<div>
+		<a href="list">목록</a>
+		<a href="modify?id=<%= (int) articleMap.get("id") %>">수정</a>
+		<a href="delete?id=<%= (int) articleMap.get("id") %>">삭제</a>
+	</div>
 </body>
 </html>
