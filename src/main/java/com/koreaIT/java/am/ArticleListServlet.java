@@ -27,7 +27,7 @@ public class ArticleListServlet extends HttpServlet {
 		try {
 			Class.forName(Config.getDBDriverName());
 			String url = Config.getDBUrl();
-			conn = DriverManager.getConnection(url, Config.getDBUrl(), Config.getDBPassWd());
+			conn = DriverManager.getConnection(url, Config.getDBUser(), Config.getDBPassWd());
 
 			int page = 1;
 			

@@ -31,7 +31,7 @@ public class ArticleDoWriteServlet extends HttpServlet {
 		try {
 			Class.forName(Config.getDBDriverName());
 			String url = Config.getDBUrl();
-			conn = DriverManager.getConnection(url, Config.getDBUrl(), Config.getDBPassWd());
+			conn = DriverManager.getConnection(url, Config.getDBUser(), Config.getDBPassWd());
 
 			SecSql sql = new SecSql();
 			sql.append("INSERT INTO article");
