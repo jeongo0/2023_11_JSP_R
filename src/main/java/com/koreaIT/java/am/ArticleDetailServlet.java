@@ -15,29 +15,42 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/article/detail")
+@WebServlet("/article/detail") // url매핑
 public class ArticleDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		int id = Integer.parseInt(request.getParameter("id"));
 		
 		Connection conn = null;
 
+		HttpSession session = request.getSession();
+		
+		int loginedMemberId = -1;
+		
+		if (session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
+		
 		try {
 			Class.forName(Config.getDBDriverName());
 			String url = Config.getDBUrl();
 			conn = DriverManager.getConnection(url, Config.getDBUser(), Config.getDBPassWd());
 
 			SecSql sql = new SecSql();
-			sql.append("SELECT * FROM article");
-			sql.append("WHERE id = ?", id);
-					
+			sql.append("SELECT A.*, M.name AS writerName");
+			sql.append("FROM article AS A");
+			sql.append("INNER JOIN `member` AS M");
+			sql.append("ON A.memberId = M.id");
+			sql.append("WHERE A.id = ?", id);
+			
 			Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
 			
 			request.setAttribute("articleMap", articleMap);
+			request.setAttribute("loginedMemberId", loginedMemberId);
 			
 			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 			
@@ -49,13 +62,12 @@ public class ArticleDetailServlet extends HttpServlet {
 		} finally {
 			try {
 				if (conn != null && !conn.isClosed()) {
-						conn.close();
+					conn.close();
 				}
 			} catch (SQLException e) {
-					e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
-
 	}
 
 }

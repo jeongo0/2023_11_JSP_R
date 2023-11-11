@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/article/list") // url매핑
 public class ArticleListServlet extends HttpServlet {
@@ -24,6 +25,16 @@ public class ArticleListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Connection conn = null;
 
+		HttpSession session = request.getSession();
+		
+		int loginedMemberId = -1;
+		Map<String, Object> memberMap = null;
+		
+		if (session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+			memberMap = (Map<String, Object>) session.getAttribute("loginedMember");
+		}
+		
 		try {
 			Class.forName(Config.getDBDriverName());
 			String url = Config.getDBUrl();
@@ -57,12 +68,17 @@ public class ArticleListServlet extends HttpServlet {
 			}
 			
 			sql = new SecSql();
-			sql.append("SELECT * FROM article");
-			sql.append("ORDER BY id DESC");
+			sql.append("SELECT A.*, M.name AS writerName");
+			sql.append("FROM article AS A");
+			sql.append("INNER JOIN `member` AS M");
+			sql.append("ON A.memberId = M.id");
+			sql.append("ORDER BY A.id DESC");
 			sql.append("LIMIT ?, ?", limitFrom, itemInAPage);
 			
 			List<Map<String, Object>> articleListMap = DBUtil.selectRows(conn, sql);
 			
+			request.setAttribute("loginedMemberId", loginedMemberId);
+			request.setAttribute("loginedMember", memberMap);
 			request.setAttribute("from", from);
 			request.setAttribute("end", end);
 			request.setAttribute("page", page);
