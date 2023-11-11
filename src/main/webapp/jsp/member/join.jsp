@@ -54,6 +54,7 @@
 	<form action="doJoin" method="post" onsubmit="joinFormSubmit(this); return false;">
 		<div>
 			로그인 아이디 : <input name="loginId" type="text" placeholder="로그인 아이디를 입력해주세요"/>
+			<a href=""></a>
 		</div>
 		<div>
 			로그인 비밀번호 : <input name="loginPw" type="text" placeholder="로그인 비밀번호를 입력해주세요"/>
