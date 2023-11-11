@@ -18,6 +18,12 @@ public class MemberDoLogoutServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8;");
 
 		HttpSession session = request.getSession();
+		
+		if (session.getAttribute("loginedMemberId") == null) {
+			response.getWriter().append("<script>alert('로그인 후 이용해주세요.'); location.replace('../home/main');</script>");
+			return;
+		}
+		
 		session.removeAttribute("loginedMemberId");
 		session.removeAttribute("loginedMember");
 

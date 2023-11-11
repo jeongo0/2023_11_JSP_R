@@ -20,8 +20,8 @@
 	<% } %>
 	<% if (loginedMemberId != -1) { %>
 		<div><a href="../member/doLogout">로그아웃</a></div>
+		<div><a href="../article/write">글쓰기</a></div>
 	<% } %>
-	<div><a href="../article/write">글쓰기</a></div>
 	<div><a href="../article/list">게시물 목록</a></div>
 </body>
 </html>
